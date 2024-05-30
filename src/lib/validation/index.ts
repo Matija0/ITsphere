@@ -4,7 +4,15 @@ import * as z from 'zod';
 // USER
 // ============================================================
 
-
+export const ProfileValidation = z.object({
+    username: z.string().min(3, {message: "Minimum 3 characters"}).max(20, {message: "Maximum 20 characters"}),
+    email: z.string().email({message: "Invalid email"}),
+    file: z.custom<File[]>().optional(),
+    bio: z.string().max(200, {message: "Maximum 200 characters"}).optional(),
+    country: z.string().optional(),
+    githubLink: z.string().url({message: "Invalid url"}).optional(),
+    tags: z.string().optional()
+})
 
 
 

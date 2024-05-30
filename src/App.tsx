@@ -5,9 +5,12 @@ import Signin from "./_root/pages/Signin";
 import Signup from "./_root/pages/Signup";
 import CreatePost from "./_root/pages/CreatePost";
 import Home from "./_root/pages/Home";
+import UpdateProfile from "./_root/pages/UpdateProfile";
+import Profile from "./_root/pages/Profile";
+import { useGetUser } from "./hooks/useGetUser";
 
 function App() {
-  const user = JSON.parse(localStorage.getItem("user") || 'null');
+  const user = useGetUser();
   return (
     <main className="flex h-screen no-scroll">
        <Routes>
@@ -15,6 +18,8 @@ function App() {
           <>
             <Route path="/" element={<RootLayout><Home /></RootLayout>} />
             <Route path="/create-post" element={<RootLayout><CreatePost /></RootLayout>} />
+            <Route path="/profile/:id" element={<RootLayout><Profile /></RootLayout>} />
+            <Route path="/update-profile/:id" element={<RootLayout><UpdateProfile /></RootLayout>} />
           </>
         ) : (
           <>

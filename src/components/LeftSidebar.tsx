@@ -23,7 +23,7 @@ const LeftSidebar = () => {
           ITsphere
         </Link>
 
-        <Link to={`/profile`} className="flex gap-3 items-center">
+        <Link to={`/profile/${userData?.userID}`} className="flex gap-3 items-center">
           <div className="flex flex-col">
             <p className="body-bold">Name</p>
             <p className="small-regular text-light-3">@{userData?.username}</p>

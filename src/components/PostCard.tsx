@@ -56,16 +56,18 @@ const PostCard = ({post, user} : PostCardProps) => {
         <div className="small-medium lg:base-medium py-5">
           <p>{post.content}</p>
           <ul className="flex gap-1 mt-2">
-           {/*  {post.tags.map((tag: string, index: string) => (
+           {
+            post.tags.map((tag, index) => (
               <li key={`${tag}${index}`} className="text-light-3 small-regular">
-                #{tag}
-              </li>
-            ))} */}
+              #{tag}
+            </li>
+            ))
+           }
           </ul>
         </div>
 
         <img
-          src={post.imageUrl || "/assets/icons/profile-placeholder.svg"}
+          src={`http://localhost:5000/${post.imageUrl}` || "/assets/icons/profile-placeholder.svg"}
           alt="post image"
           className="post-card_img"
         />
