@@ -11,6 +11,7 @@ const ProfileUploader = ({ fieldChange, mediaUrl }: ProfileUploaderProps) => {
   const [file, setFile] = useState<File[]>([]);
   const [fileUrl, setFileUrl] = useState<string>(mediaUrl);
 
+
   const onDrop = useCallback(
     (acceptedFiles: FileWithPath[]) => {
       setFile(acceptedFiles);
@@ -26,6 +27,7 @@ const ProfileUploader = ({ fieldChange, mediaUrl }: ProfileUploaderProps) => {
       "image/*": [".png", ".jpeg", ".jpg"],
     },
   });
+
   return (
     <div {...getRootProps()}>
       <input {...getInputProps()} className="cursor-pointer" />

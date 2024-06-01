@@ -14,8 +14,6 @@ const Home = () => {
     const fetchData = async () => {
       const res = await axios.get(`${baseUrl}/posts`);
       setData(res.data);
-      console.log(res.data)
-      console.log(data)
       if(res.data) setIsDataLoading(false)
     };
 

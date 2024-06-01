@@ -16,7 +16,7 @@ const PostCard = ({post, user} : PostCardProps) => {
           <Link to={`/profile/${post.userId}`}>
             <img
               src={
-                user.profilePicture ||
+                user?.profilePicture ||
                 "/assets/icons/profile-placeholder.svg"
               }
               alt="creator"
@@ -26,7 +26,7 @@ const PostCard = ({post, user} : PostCardProps) => {
 
           <div className="flex flex-col">
             <p className="base-medium lg:body-bold text-light-1">
-              {user.username}
+              {user?.username}
             </p>
             <div className="flex-center gap-2 text-light-3">
               <p className="subtle-semibold lg:small-regular ">
@@ -42,7 +42,7 @@ const PostCard = ({post, user} : PostCardProps) => {
 
         <Link
           to={`/update-post/${post.id}`}
-          className={`${user.id !== post.userId && "hidden"}`}>
+          className={`${user?.id !== post.userId && "hidden"}`}>
           <img
             src={"/assets/icons/edit.svg"}
             alt="edit"

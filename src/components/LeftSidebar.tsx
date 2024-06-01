@@ -4,6 +4,8 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import { Button } from "./ui/button";
 import { useEffect, useState } from "react";
 import { useGetUser } from "@/hooks/useGetUser";
+import axios from "axios";
+import { baseUrl } from "@/constants/baseUrl";
 
 const LeftSidebar = () => {
   const { pathname } = useLocation();
@@ -12,7 +14,11 @@ const LeftSidebar = () => {
   useEffect(() => {
     const user = useGetUser();
     if (user !== null) {
-      setUserData(user);
+      const fetchUserData = async () => {
+        const response = await axios.get(`${baseUrl}/users/${user.userID}`);
+        setUserData(response.data);
+      };
+      fetchUserData();
     }
   }, []);
 
@@ -23,7 +29,16 @@ const LeftSidebar = () => {
           ITsphere
         </Link>
 
-        <Link to={`/profile/${userData?.userID}`} className="flex gap-3 items-center">
+        <Link
+          to={`/profile/${userData?._id}`}
+          className="flex gap-3 items-center"
+        >
+            <img
+              src={`http://localhost:5000/${userData?.profilePicture}`}
+              alt="profile"
+              className="h-14 w-14 rounded-full"
+            />
+  
           <div className="flex flex-col">
             <p className="body-bold">Name</p>
             <p className="small-regular text-light-3">@{userData?.username}</p>

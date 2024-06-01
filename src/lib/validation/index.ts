@@ -10,7 +10,7 @@ export const ProfileValidation = z.object({
     file: z.custom<File[]>().optional(),
     bio: z.string().max(200, {message: "Maximum 200 characters"}).optional(),
     country: z.string().optional(),
-    githubLink: z.string().url({message: "Invalid url"}).optional(),
+    githubLink: z.string().optional(),
     tags: z.string().optional()
 })
 

@@ -3,7 +3,7 @@ import { ProfileValidation } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { FieldValues, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
 import { z } from "zod";
 import editIcon from "@/assets/icons/edit.svg";
@@ -27,7 +27,7 @@ const UpdateProfile = () => {
   const [userData, setUserData] = useState<any>(null);
   const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
 
-  const { setValue, ...form } = useForm<z.infer<typeof ProfileValidation>>({
+  const { reset, ...form } = useForm<z.infer<typeof ProfileValidation>>({
     resolver: zodResolver(ProfileValidation),
     defaultValues: {
       file: [],
@@ -39,56 +39,52 @@ const UpdateProfile = () => {
       tags: "",
     },
   });
-
+  
   useEffect(() => {
     const fetchUserData = async () => {
       const res = await axios.get(`${baseUrl}/users/${id}`);
-      setUserData(res.data);
-
-      // Set form values after data has been fetched
-      setValue("username", res.data.username);
-      setValue("email", res.data.email);
-      setValue("bio", res.data.bio || "");
-      setValue("country", res.data.country || "");
-      setValue("githubLink", res.data.githubLink || "");
-      setValue("tags", res.data.tags || "");
-    };
-
+      const image = `http://localhost:5000/${res.data.profilePicture}`
+      setUserData((prev: any) => ({...prev, profilePicture: image}))
+      reset({
+        file: [],
+        username: res.data.username || "",
+        email: res.data.email || "",
+        bio: res.data.bio || "",
+        country: res.data.country || "",
+        githubLink: res.data.githubLink || "",
+        tags: res.data.tags ? res.data.tags.join(", ") : "",
+      });
+    }
     fetchUserData();
-  }, [setValue]);
+  }, [reset])
+   
 
   //Hanalder
   const handleUpdate = async (value: z.infer<typeof ProfileValidation>) => {
     setIsLoadingUpdate(true);
-    const formData = new FormData();
-    if (value.username !== undefined && value.username !== null) {
-      formData.append("username", value.username);
-    }
-    if (value.bio !== undefined && value.bio !== null) {
-      formData.append("bio", value.bio);
-    }
-    if (value.country !== undefined && value.country !== null) {
-      formData.append("country", value.country);
-    }
-    if (value.githubLink !== undefined && value.githubLink !== null) {
-      formData.append("githubLink", value.githubLink);
-    }
-    if (value.tags !== undefined && value.tags !== null) {
-      formData.append("tags", value.tags);
-    }
-    if (value.file !== undefined && value.file !== null && value.file.length > 0) {
-      formData.append("file", value.file[0]);
-    }
     try {
-     const res = await axios.put(`${baseUrl}/users/${id}`, formData).then(() => {
-        setIsLoadingUpdate(false);
-        console.log(res.data)
-      })
+     const res = await axios.put(`${baseUrl}/users/${id}`, 
+      {
+        profilePicture: value.file[0],
+        username: value.username,
+        bio: value.bio,
+        country: value.country,
+        githubLink: value.githubLink,
+        tags: value.tags,
+      }
+     , {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log(res.data);
+      setIsLoadingUpdate(false);
     } catch (error) {
       setIsLoadingUpdate(false);
       console.log(error);
     }
   };
+
   return (
     <div className="flex flex-1">
       <div className="common-container">
@@ -102,7 +98,6 @@ const UpdateProfile = () => {
           />
           <h2 className="h3-bold md:h2-bold text-left w-full">Edit Profile</h2>
         </div>
-
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(handleUpdate)}
@@ -116,7 +111,7 @@ const UpdateProfile = () => {
                   <FormControl>
                     <ProfileUploader
                       fieldChange={field.onChange}
-                      mediaUrl={userData?.profilePicture || ""}
+                      mediaUrl={userData?.profilePicture}
                     />
                   </FormControl>
                   <FormMessage className="shad-form_message" />
