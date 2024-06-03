@@ -61,7 +61,9 @@ const PostForm = () => {
   formData.append("category", values.category);
   formData.append("tags", values.tags);
 
-  try {
+  console.log(formData);
+
+ /*  try {
     const response = await axios.post(`${baseUrl}/posts`, formData, { 
       headers: {
         "Content-Type": "multipart/form-data" 
@@ -70,7 +72,7 @@ const PostForm = () => {
     console.log(response.data);   
   } catch (error) {
     console.error(error);
-  }  
+  }   */
   };
   return (
     <Form {...form}>
@@ -118,7 +120,7 @@ const PostForm = () => {
             <FormItem>
               <FormLabel className="shad-form_label">Category</FormLabel>
               <FormControl>
-               <Select>
+               <Select onValueChange={field.onChange} defaultValue={field.value}>
                  <SelectTrigger>
                   <SelectValue placeholder="Select a category"/>
                  </SelectTrigger>

@@ -14,9 +14,9 @@ const Signup = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     axios.post(`${baseUrl}/users`, {
-      name,
-      email,
-      password,
+      username: name,
+      email: email,
+      password: password,
      
     }, {
       headers: {

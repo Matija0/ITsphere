@@ -1,11 +1,12 @@
 import { sidebarLinks } from "@/constants/links";
 import { INavLink } from "@/types";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, Navigate, NavLink, useLocation } from "react-router-dom";
 import { Button } from "./ui/button";
 import { useEffect, useState } from "react";
 import { useGetUser } from "@/hooks/useGetUser";
 import axios from "axios";
 import { baseUrl } from "@/constants/baseUrl";
+import profilePlacerholder from "@/assets/icons/profile-placeholder.svg";
 
 const LeftSidebar = () => {
   const { pathname } = useLocation();
@@ -22,6 +23,12 @@ const LeftSidebar = () => {
     }
   }, []);
 
+  const logout = () => {
+    localStorage.removeItem("user");
+    window.location.reload();
+    <Navigate to="/login" />;
+  }
+
   return (
     <nav className="leftsidebar">
       <div className="flex flex-col gap-11">
@@ -34,7 +41,7 @@ const LeftSidebar = () => {
           className="flex gap-3 items-center"
         >
             <img
-              src={`http://localhost:5000/${userData?.profilePicture}`}
+              src={userData?.profilePicture === "" ? profilePlacerholder : `http://localhost:5000/${userData?.profilePicture}`}
               alt="profile"
               className="h-14 w-14 rounded-full"
             />
@@ -67,7 +74,7 @@ const LeftSidebar = () => {
           })}
         </ul>
       </div>
-      <Button className="shad-button_ghost">Logout</Button>
+      <Button onClick={logout} className="shad-button_ghost">Logout</Button>
     </nav>
   );
 };

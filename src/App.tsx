@@ -8,6 +8,7 @@ import Home from "./_root/pages/Home";
 import UpdateProfile from "./_root/pages/UpdateProfile";
 import Profile from "./_root/pages/Profile";
 import { useGetUser } from "./hooks/useGetUser";
+import Explore from "./_root/pages/Explore";
 
 function App() {
   const user = useGetUser();
@@ -20,6 +21,7 @@ function App() {
             <Route path="/create-post" element={<RootLayout><CreatePost /></RootLayout>} />
             <Route path="/profile/:id" element={<RootLayout><Profile /></RootLayout>} />
             <Route path="/update-profile/:id" element={<RootLayout><UpdateProfile /></RootLayout>} />
+            <Route path="/explore" element={<RootLayout><Explore /></RootLayout>} />
           </>
         ) : (
           <>

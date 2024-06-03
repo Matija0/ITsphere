@@ -79,6 +79,8 @@ const UpdateProfile = () => {
       });
       console.log(res.data);
       setIsLoadingUpdate(false);
+      window.location.reload();
+      navigate(`/profile/${id}`);
     } catch (error) {
       setIsLoadingUpdate(false);
       console.log(error);

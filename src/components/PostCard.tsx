@@ -2,13 +2,30 @@ import { IPost } from "@/types"
 import { IUser } from "@/types"
 import { Link } from "react-router-dom"
 import PostStats from "./PostStats"
+import { useEffect, useState } from "react"
+import axios from "axios"
+import { baseUrl } from "@/constants/baseUrl"
+import { useGetUser } from "@/hooks/useGetUser"
+import edit from "@/assets/icons/edit.svg"
 
 type PostCardProps = {
   post: IPost
-  user: IUser
 }
 
-const PostCard = ({post, user} : PostCardProps) => {
+const PostCard = ({post} : PostCardProps) => {
+
+  const [user, setUser] = useState<IUser>()
+
+  const currentUser = useGetUser()
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const res = await axios.get(`${baseUrl}/users/${post.userId}`)
+      setUser(res.data)
+    }
+    fetchUser()
+  }, [post.userId])
+
   return (
     <div className="post-card">
       <div className="flex-between">
@@ -16,7 +33,7 @@ const PostCard = ({post, user} : PostCardProps) => {
           <Link to={`/profile/${post.userId}`}>
             <img
               src={
-                user?.profilePicture ||
+                `http://localhost:5000/${user?.profilePicture}` ||
                 "/assets/icons/profile-placeholder.svg"
               }
               alt="creator"
@@ -40,19 +57,23 @@ const PostCard = ({post, user} : PostCardProps) => {
           </div>
         </div>
 
-        <Link
-          to={`/update-post/${post.id}`}
-          className={`${user?.id !== post.userId && "hidden"}`}>
+       {
+        currentUser.userID === post.userId && (
+          <Link
+          to={`/update-post/${post._id}`}
+          className={`${user?._id !== post.userId && "hidden"}`}>
           <img
-            src={"/assets/icons/edit.svg"}
+            src={edit}
             alt="edit"
             width={20}
             height={20}
           />
         </Link>
+        )
+       }
       </div>
 
-      <Link to={`/posts/${post.id}`}>
+      <Link to={`/posts/${post._id}`}>
         <div className="small-medium lg:base-medium py-5">
           <p>{post.content}</p>
           <ul className="flex gap-1 mt-2">
@@ -73,7 +94,7 @@ const PostCard = ({post, user} : PostCardProps) => {
         />
       </Link>
 
-      <PostStats  />
+      <PostStats post={post}  />
     </div>
   )
 }

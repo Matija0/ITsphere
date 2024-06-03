@@ -4,7 +4,7 @@ export type INavLink = {
   };
 
   export type IPost = {
-    id: string;
+    _id: string;
     userId: string;
     content: string;
     imageUrl: string;
@@ -16,7 +16,7 @@ export type INavLink = {
   };
 
   export type IUser = {
-    id: string;
+    _id: string;
     username: string;
     email: string;
     password: string;
