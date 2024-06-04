@@ -12,27 +12,23 @@ const Home = () => {
   const [allUsers, setAllUsers] = useState<any>(null);
   const [isUserLoading, setIsUserLoading] = useState(true);
 
+  const fetchData = async () => {
+    const res = await axios.get(`${baseUrl}/posts`);
+    setData(res.data);
+    if(res.data) setIsDataLoading(false)
+  };
+
+  const fetchAllUsers = async () => {
+    const res = await axios.get(`${baseUrl}/users`);
+    if(!res.data) return;
+    setAllUsers(res.data);
+    setIsUserLoading(false)
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      const res = await axios.get(`${baseUrl}/posts`);
-      setData(res.data);
-      if(res.data) setIsDataLoading(false)
-    };
-  
     fetchData();
+    fetchAllUsers();
   }, []); 
 
-
-  useEffect(() => {
-    const fetchAllUsers = async () => {
-      const res = await axios.get(`${baseUrl}/users`);
-      if(!res.data) return;
-      setAllUsers(res.data);
-      setIsUserLoading(false)
-    };
-  
-    fetchAllUsers();
-  }, []);
 
   const handleFollow = async(id: string) => {
     const user = useGetUser();

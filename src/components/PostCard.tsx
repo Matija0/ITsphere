@@ -18,13 +18,14 @@ const PostCard = ({post} : PostCardProps) => {
 
   const currentUser = useGetUser()
 
+  const fetchUser = async () => {
+    const res = await axios.get(`${baseUrl}/users/${post.userId}`)
+    setUser(res.data)
+  }
+
   useEffect(() => {
-    const fetchUser = async () => {
-      const res = await axios.get(`${baseUrl}/users/${post.userId}`)
-      setUser(res.data)
-    }
     fetchUser()
-  }, [post.userId])
+  }, [post])
 
   return (
     <div className="post-card">

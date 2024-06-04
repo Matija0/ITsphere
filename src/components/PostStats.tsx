@@ -6,39 +6,39 @@ import { useLocation } from "react-router";
 import like from "@/assets/icons/like.svg";
 import liked from "@/assets/icons/liked.svg";
 import { useGetUser } from "@/hooks/useGetUser";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
+import { MessageSquareMore } from "lucide-react";
 
 
 type PostStatsProps = {
   post: IPost;
 };
 
-
-const PostStats = ({post} : PostStatsProps) => {
-
+const PostStats = ({ post }: PostStatsProps) => {
   const location = useLocation();
 
-  const likesList = post.likes
-
-  console.log(likesList)
+  const likesList = post.likes;
 
   const currentUser = useGetUser();
 
   const checkIsLiked = (likes: string[], userId: string) => {
     return likes.includes(userId);
-  }
+  };
   const [isLiked, setIsLiked] = useState(false);
 
   const containerStyles = location.pathname.startsWith("/profile")
     ? "w-full"
     : "";
 
-  const handleLike = async ( e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
+  const handleLike = async (
+    e: React.MouseEvent<HTMLImageElement, MouseEvent>
+  ) => {
     e.stopPropagation();
     const res = axios.put(`${baseUrl}/posts/${post._id}/like`, {
       userId: currentUser.userID,
     });
     console.log(res);
-  }
+  };
 
   useEffect(() => {
     setIsLiked(checkIsLiked(post.likes, currentUser.userID));
@@ -46,10 +46,11 @@ const PostStats = ({post} : PostStatsProps) => {
 
   return (
     <div
-    className={`flex justify-between items-center z-20 ${containerStyles}`}>
+      className={`flex justify-between items-center z-20 ${containerStyles}`}
+    >
       <div className="flex gap-5 mr-5 items-center">
         <img
-         src={isLiked ? liked : like}
+          src={isLiked ? liked : like}
           alt="like"
           width={20}
           height={20}
@@ -58,10 +59,21 @@ const PostStats = ({post} : PostStatsProps) => {
         />
         <p className="small-medium lg:base-medium">{likesList.length}</p>
       </div>
+      <Dialog>
+  <DialogTrigger><MessageSquareMore /></DialogTrigger>
+  <DialogContent className=" bg-black">
+    <DialogHeader>
+      <DialogTitle>Post comments</DialogTitle>
+      <DialogDescription className="">
+        This is a comment
+      </DialogDescription>
+    </DialogHeader>
+  </DialogContent>
+</Dialog>
 
 
     </div>
-  )
-}
+  );
+};
 
-export default PostStats
+export default PostStats;

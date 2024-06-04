@@ -10,6 +10,7 @@ import Profile from "./_root/pages/Profile";
 import { useGetUser } from "./hooks/useGetUser";
 import Explore from "./_root/pages/Explore";
 
+
 function App() {
   const user = useGetUser();
   return (
